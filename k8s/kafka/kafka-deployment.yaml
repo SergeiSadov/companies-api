@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-broker1
+  labels:
+    app: companies-kafka-1
+spec:
+  selector:
+    matchLabels:
+      app: companies-kafka-1
+      tier: kafka-broker1
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: companies-kafka-1
+        tier: kafka-broker1
+    spec:
+      containers:
+        - image: wurstmeister/kafka
+          name: kafka
+          imagePullPolicy: "IfNotPresent"
+          envFrom:
+            - configMapRef:
+                name: kafka-config
+          ports:
+            - containerPort: 9092
+              name: kafka

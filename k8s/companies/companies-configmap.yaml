@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: companies-api-config
+  labels:
+    app: companies-api
+data:
+  ENV: "dev"
+  PORT: "3000"
+  NAME: "companies"
+  JWT_SECRET: "test_key"
+  DB_HOST: "companies-postgres"
+  DB_PORT: "5432"
+  DB_USERNAME: "user"
+  DB_PASSWORD: "pass"
+  DB_NAME: "companies"
+  DB_MIGRATION_DIR: "internal/migrations"
+  DB_DIALECT: "postgres"
+  KAFKA_BROKERS: "kafka-broker1:9092"
+  KAFKA_CREATE_COMPANY_TOPIC: "company-created"
+  KAFKA_UPDATE_COMPANY_TOPIC: "company-updated"
+  KAFKA_DELETE_COMPANY_TOPIC: "company-deleted"

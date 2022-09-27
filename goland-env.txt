@@ -1,0 +1,1 @@
+DB_DIALECT=postgres;DB_HOST=localhost;DB_MIGRATION_DIR=internal/migrations;DB_NAME=companies;DB_PASSWORD=pass;DB_PORT=5432;DB_USERNAME=user;PORT=3000;ENV=dev;JWT_SECRET=test_key;KAFKA_BROKERS=localhost:9092;KAFKA_CREATE_COMPANY_TOPIC=company-created;KAFKA_UPDATE_COMPANY_TOPIC=company-updated;KAFKA_DELETE_COMPANY_TOPIC=company-deleted

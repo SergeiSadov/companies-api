@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-config
+  labels:
+    app: companies-kafka
+data:
+  KAFKA_ADVERTISED_PORT: "9092"
+  KAFKA_ADVERTISED_HOST_NAME: "localhost"
+  KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+  KAFKA_BROKER_ID: "1"
+  KAFKA_CREATE_TOPICS: "company-created:1:1,company-updated:1:1,company-deleted:1:1"
