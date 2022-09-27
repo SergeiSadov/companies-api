@@ -3,7 +3,6 @@ package auth
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -86,7 +85,6 @@ func (s *ServiceTestSuite) Test_SuccessAuth() {
 	s.NoError(err)
 
 	var authResponse api.AuthResponse
-	fmt.Println(string(respBody))
 	err = json.Unmarshal(respBody, &authResponse)
 	s.NoError(err)
 

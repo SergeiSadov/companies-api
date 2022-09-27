@@ -22,7 +22,6 @@ func NewCachedClient(
 }
 
 func (c CachedClient) GetCountryCode(ip string) (code string, err error) {
-	return "CY", nil
 	ipVal, found := c.cache.Get(ip)
 
 	var ok bool
