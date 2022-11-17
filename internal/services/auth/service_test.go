@@ -3,7 +3,7 @@ package auth
 import (
 	"bytes"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -81,7 +81,7 @@ func (s *ServiceTestSuite) Test_SuccessAuth() {
 	resp, err := http.DefaultClient.Do(req)
 	s.NoError(err)
 
-	respBody, err := ioutil.ReadAll(resp.Body)
+	respBody, err := io.ReadAll(resp.Body)
 	s.NoError(err)
 
 	var authResponse api.AuthResponse

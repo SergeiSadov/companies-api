@@ -35,7 +35,7 @@ func GetRouterDef() di.Def {
 			httpErrAdapter := http_adapter.New(http.StatusInternalServerError, http_adapter.AdaptBadRequestError)
 			cachedClient := ctn.Get(IPAPICachedClientDef).(ipapi.IClient)
 			authMW := auth.NewMiddleware(config.App.JWTSecret, logger)
-			ipMW := ip.NewMiddleware(cachedClient, logger, "CY")
+			ipMW := ip.NewMiddleware(cachedClient, logger, ip.NewErrorAdapter(ip.PreparedErrorMapping), config.Countries.AlloweCountryCode)
 
 			companysvc.SetRoutes(companyService, validators.PreparedValidators, httpErrAdapter, r, logger, authMW, ipMW)
 			authsvc.SetRoutes(authService, httpErrAdapter, r, logger)

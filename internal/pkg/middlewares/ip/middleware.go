@@ -1,7 +1,6 @@
 package ip
 
 import (
-	"errors"
 	"net"
 	"net/http"
 
@@ -12,22 +11,26 @@ import (
 
 const (
 	DefaultAllowedCountry = "CY"
+	XForwardedForHeader   = "X-Forwarded-For"
 )
 
 type Middleware struct {
 	client           ipapi.IClient
 	logger           *zap.Logger
+	errorAdapter     IErrorAdapter
 	allowedCountries []string
 }
 
 func NewMiddleware(
 	client ipapi.IClient,
 	logger *zap.Logger,
+	errorAdapter IErrorAdapter,
 	allowedCountries ...string,
 ) *Middleware {
 	return &Middleware{
 		client:           client,
 		logger:           logger,
+		errorAdapter:     errorAdapter,
 		allowedCountries: allowedCountries,
 	}
 }
@@ -38,6 +41,12 @@ func (m *Middleware) HTTPMiddleware(h http.Handler) http.Handler {
 		if err != nil {
 			m.logger.Error(err.Error())
 			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		//bypass empty code as we use free edition of ipapi
+		if code == "" {
+			h.ServeHTTP(w, r)
 			return
 		}
 
@@ -52,18 +61,18 @@ func (m *Middleware) HTTPMiddleware(h http.Handler) http.Handler {
 }
 
 func (m *Middleware) getCountryCode(r *http.Request) (code string, err error) {
-	address := r.Header.Get("X-Forwarded-For")
+	address := r.Header.Get(XForwardedForHeader)
 	if address == "" {
 		address = r.RemoteAddr
 	}
 	ip := net.ParseIP(address)
 	if ip == nil {
-		return code, errors.New("invalid ip address")
+		return code, ErrInvalidIpAddress
 	}
 
 	resp, err := m.client.GetCountryCode(ip.String())
 	if err != nil {
-		return
+		return code, m.errorAdapter.AdaptError(err)
 	}
 
 	return resp, nil

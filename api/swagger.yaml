@@ -49,6 +49,10 @@ paths:
         - "application/json"
       parameters:
         - in: "header"
+          name: "X-Forwarded-For"
+          type: "string"
+          required: true      
+        - in: "header"
           name: "Authorization"
           type: "string"
           required: true
@@ -134,6 +138,10 @@ paths:
         - "application/json"
       parameters:
         - in: "header"
+          name: "X-Forwarded-For"
+          type: "string"
+          required: true      
+        - in: "header"
           name: "Authorization"
           type: "string"
           required: true
@@ -203,6 +211,10 @@ paths:
       produces:
         - "application/json"
       parameters:
+        - in: "header"
+          name: "X-Forwarded-For"
+          type: "string"
+          required: true      
         - in: "header"
           name: "Authorization"
           type: "string"

@@ -3,7 +3,7 @@ package company
 import (
 	"bytes"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	"companies-api/internal/entities/api"
@@ -33,7 +33,7 @@ func (s *ServiceTestSuite) Test_SuccessCreateCompany() {
 	resp, err := http.DefaultClient.Do(req)
 	s.NoError(err)
 
-	respBody, err := ioutil.ReadAll(resp.Body)
+	respBody, err := io.ReadAll(resp.Body)
 	s.NoError(err)
 	var resultCompany api.CreateCompanyResponse
 	err = json.Unmarshal(respBody, &resultCompany)

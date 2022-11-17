@@ -5,9 +5,10 @@ import (
 )
 
 type Config struct {
-	App      App
-	Database Database
-	Kafka    Kafka
+	App       App
+	Database  Database
+	Kafka     Kafka
+	Countries Countries
 }
 
 func Setup() (config Config, err error) {

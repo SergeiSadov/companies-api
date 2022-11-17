@@ -25,7 +25,11 @@ func GetIPAPIClientDef() di.Def {
 		Build: func(ctn di.Container) (interface{}, error) {
 			return ipapi.NewClient(&http.Client{
 				Timeout: defaultTimeout,
-			}), nil
+			},
+				ipapi.NewErrAdapter(map[int]error{
+					ipapi.StatusTooManyRequests: ipapi.ErrToManyRequests,
+				}),
+			), nil
 		},
 	}
 }

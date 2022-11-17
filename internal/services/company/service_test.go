@@ -68,7 +68,7 @@ func (s *ServiceTestSuite) SetupTest() {
 	s.NoError(err)
 
 	authMW := auth.NewMiddleware("secret", logger)
-	ipMW := ip.NewMiddleware(s.ipapiClient, logger, ip.DefaultAllowedCountry)
+	ipMW := ip.NewMiddleware(s.ipapiClient, logger, ip.NewErrorAdapter(ip.PreparedErrorMapping), ip.DefaultAllowedCountry)
 
 	r := mux.NewRouter()
 	SetRoutes(s.service, validators.PreparedValidators, http_adapter.New(http.StatusInternalServerError, http_adapter.AdaptBadRequestError), r, logger, authMW, ipMW)

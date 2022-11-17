@@ -3,7 +3,7 @@ package ipapi
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 )
 
 const (
@@ -11,22 +11,25 @@ const (
 )
 
 type Client struct {
-	client HttpClient
+	client     HttpClient
+	errAdapter IErrorAdapter
 }
 
-func NewClient(client HttpClient) *Client {
+func NewClient(client HttpClient, errAdapter IErrorAdapter) *Client {
 	return &Client{
-		client: client,
+		client:     client,
+		errAdapter: errAdapter,
 	}
 }
 
 func (c Client) GetCountryCode(ip string) (code string, err error) {
 	resp, err := c.client.Get(fmt.Sprintf(UrlTpl, ip))
 	if err != nil {
-		return
+		return code, c.errAdapter.AdaptStatusToErr(resp.StatusCode, err)
 	}
+
 	var countryResp Response
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return
 	}

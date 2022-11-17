@@ -1,4 +1,4 @@
-FROM golang:1.18-alpine
+FROM golang:1.19-alpine
 
 WORKDIR /app
 
@@ -11,4 +11,4 @@ RUN go build -o /companies-api cmd/companies-api/*.go
 
 EXPOSE 3000
 
-CMD [ "/companies-api" ]
+ENTRYPOINT [ "/companies-api" ]
