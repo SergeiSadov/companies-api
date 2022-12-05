@@ -36,7 +36,7 @@ func NewAdapter() *Adapter {
 	return &Adapter{}
 }
 
-func (a Adapter) AdaptCreateReqToRepo(req *api.CreateCompanyRequest) (adapted *repository.Company) {
+func (a *Adapter) AdaptCreateReqToRepo(req *api.CreateCompanyRequest) (adapted *repository.Company) {
 	return &repository.Company{
 		ID:      req.ID,
 		Name:    req.Name,
@@ -47,7 +47,7 @@ func (a Adapter) AdaptCreateReqToRepo(req *api.CreateCompanyRequest) (adapted *r
 	}
 }
 
-func (a Adapter) AdaptRepoToCreateResp(req *repository.Company) (adapted *api.CreateCompanyResponse) {
+func (a *Adapter) AdaptRepoToCreateResp(req *repository.Company) (adapted *api.CreateCompanyResponse) {
 	return &api.CreateCompanyResponse{
 		Company: api.Company{
 			ID:      req.ID,
@@ -60,11 +60,11 @@ func (a Adapter) AdaptRepoToCreateResp(req *repository.Company) (adapted *api.Cr
 	}
 }
 
-func (a Adapter) AdaptGetReqToRepo(req *api.GetCompanyRequest) (id int) {
+func (a *Adapter) AdaptGetReqToRepo(req *api.GetCompanyRequest) (id int) {
 	return req.ID
 }
 
-func (a Adapter) AdaptRepoToGetResp(req *repository.Company) (adapted *api.GetCompanyResponse) {
+func (a *Adapter) AdaptRepoToGetResp(req *repository.Company) (adapted *api.GetCompanyResponse) {
 	return &api.GetCompanyResponse{
 		Company: api.Company{
 			ID:      req.ID,
@@ -77,7 +77,7 @@ func (a Adapter) AdaptRepoToGetResp(req *repository.Company) (adapted *api.GetCo
 	}
 }
 
-func (a Adapter) AdaptUpdateReqToRepo(req *api.UpdateCompanyRequest) (adapted *repository.Company) {
+func (a *Adapter) AdaptUpdateReqToRepo(req *api.UpdateCompanyRequest) (adapted *repository.Company) {
 	return &repository.Company{
 		ID:      req.ID,
 		Name:    req.Name,
@@ -88,7 +88,7 @@ func (a Adapter) AdaptUpdateReqToRepo(req *api.UpdateCompanyRequest) (adapted *r
 	}
 }
 
-func (a Adapter) AdaptRepoToUpdateResp(req *repository.Company) (adapted *api.UpdateCompanyResponse) {
+func (a *Adapter) AdaptRepoToUpdateResp(req *repository.Company) (adapted *api.UpdateCompanyResponse) {
 	return &api.UpdateCompanyResponse{
 		Company: api.Company{
 			ID:      req.ID,
@@ -101,11 +101,11 @@ func (a Adapter) AdaptRepoToUpdateResp(req *repository.Company) (adapted *api.Up
 	}
 }
 
-func (a Adapter) AdaptDeleteReqToRepo(req *api.DeleteCompanyRequest) (id int) {
+func (a *Adapter) AdaptDeleteReqToRepo(req *api.DeleteCompanyRequest) (id int) {
 	return req.ID
 }
 
-func (a Adapter) AdaptListReqToRepo(req *api.ListCompanyRequest) (adapted *repository.ListCompanyParams) {
+func (a *Adapter) AdaptListReqToRepo(req *api.ListCompanyRequest) (adapted *repository.ListCompanyParams) {
 	return &repository.ListCompanyParams{
 		Name:    req.Name,
 		Code:    req.Code,
@@ -117,7 +117,7 @@ func (a Adapter) AdaptListReqToRepo(req *api.ListCompanyRequest) (adapted *repos
 	}
 }
 
-func (a Adapter) AdaptRepoToListResp(req []repository.Company) (adapted []api.Company) {
+func (a *Adapter) AdaptRepoToListResp(req []repository.Company) (adapted []api.Company) {
 	adapted = make([]api.Company, len(req))
 	for i := range req {
 		adapted[i].ID = req[i].ID
@@ -131,7 +131,7 @@ func (a Adapter) AdaptRepoToListResp(req []repository.Company) (adapted []api.Co
 	return
 }
 
-func (a Adapter) AdaptCompanyRepoToKafka(req *repository.Company) (adapted kafka.Message, err error) {
+func (a *Adapter) AdaptCompanyRepoToKafka(req *repository.Company) (adapted kafka.Message, err error) {
 	e := event.CompanyEvent{
 		ID:      req.ID,
 		Name:    req.Name,
@@ -150,7 +150,7 @@ func (a Adapter) AdaptCompanyRepoToKafka(req *repository.Company) (adapted kafka
 	}, nil
 }
 
-func (a Adapter) AdaptIDEventToKafka(id int) (adapted kafka.Message, err error) {
+func (a *Adapter) AdaptIDEventToKafka(id int) (adapted kafka.Message, err error) {
 	e := event.IDEvent{
 		ID: id,
 	}

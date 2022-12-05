@@ -64,8 +64,7 @@ func (s *ServiceTestSuite) SetupTest() {
 		s.adapter,
 	)
 
-	logger, err := zap.NewDevelopment()
-	s.NoError(err)
+	logger := zap.NewNop()
 
 	authMW := auth.NewMiddleware("secret", logger)
 	ipMW := ip.NewMiddleware(s.ipapiClient, logger, ip.NewErrorAdapter(ip.PreparedErrorMapping), ip.DefaultAllowedCountry)
