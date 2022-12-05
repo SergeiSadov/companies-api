@@ -1,4 +1,4 @@
 .idea
 .vscode
 /companies-api
-/coverage.out
+coverage.out

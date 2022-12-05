@@ -22,7 +22,7 @@ func NewClient(client HttpClient, errAdapter IErrorAdapter) *Client {
 	}
 }
 
-func (c Client) GetCountryCode(ip string) (code string, err error) {
+func (c *Client) GetCountryCode(ip string) (code string, err error) {
 	resp, err := c.client.Get(fmt.Sprintf(UrlTpl, ip))
 	if err != nil {
 		return code, c.errAdapter.AdaptStatusToErr(resp.StatusCode, err)

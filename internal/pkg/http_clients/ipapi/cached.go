@@ -21,7 +21,7 @@ func NewCachedClient(
 	}
 }
 
-func (c CachedClient) GetCountryCode(ip string) (code string, err error) {
+func (c *CachedClient) GetCountryCode(ip string) (code string, err error) {
 	ipVal, found := c.cache.Get(ip)
 
 	var ok bool

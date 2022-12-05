@@ -1,7 +1,7 @@
 package validators
 
 var (
-	PreparedValidators = Validators{
+	PreparedValidators = &Validators{
 		CreateValidators: []ValidatorFunc{
 			ValidateName, ValidateCode, ValidateCountry, ValidateWebsite, ValidatePhone,
 		},

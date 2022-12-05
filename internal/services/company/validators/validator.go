@@ -18,7 +18,7 @@ type Validators struct {
 	DeleteValidators []IDValidatorFunc
 }
 
-func (v Validators) ValidateCreateRequest(req *api.CreateCompanyRequest) (err error) {
+func (v *Validators) ValidateCreateRequest(req *api.CreateCompanyRequest) (err error) {
 	for _, v := range v.CreateValidators {
 		if validationErr := v(req.Company); validationErr != nil {
 			return validationErr
@@ -28,7 +28,7 @@ func (v Validators) ValidateCreateRequest(req *api.CreateCompanyRequest) (err er
 	return nil
 }
 
-func (v Validators) ValidateGetRequest(req *api.GetCompanyRequest) (err error) {
+func (v *Validators) ValidateGetRequest(req *api.GetCompanyRequest) (err error) {
 	for _, v := range v.GetValidators {
 		if validationErr := v(req.ID); validationErr != nil {
 			return validationErr
@@ -38,7 +38,7 @@ func (v Validators) ValidateGetRequest(req *api.GetCompanyRequest) (err error) {
 	return nil
 }
 
-func (v Validators) ValidateUpdateRequest(req *api.UpdateCompanyRequest) (err error) {
+func (v *Validators) ValidateUpdateRequest(req *api.UpdateCompanyRequest) (err error) {
 	for _, v := range v.UpdateValidators {
 		if validationErr := v(req.Company); validationErr != nil {
 			return validationErr
@@ -48,7 +48,7 @@ func (v Validators) ValidateUpdateRequest(req *api.UpdateCompanyRequest) (err er
 	return nil
 }
 
-func (v Validators) ValidateDeleteRequest(req *api.DeleteCompanyRequest) (err error) {
+func (v *Validators) ValidateDeleteRequest(req *api.DeleteCompanyRequest) (err error) {
 	for _, v := range v.DeleteValidators {
 		if validationErr := v(req.ID); validationErr != nil {
 			return validationErr
