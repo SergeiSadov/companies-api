@@ -37,7 +37,7 @@ func (c *Company) Create(ctx context.Context, req *repository.Company) (response
 	return cmd.Res, c.errorAdapter.AdaptSqlErr(c.interactor.Perform(cmd))
 }
 
-func (c *Company) Get(ctx context.Context, id int) (response *repository.Company, err error) {
+func (c *Company) Get(ctx context.Context, id string) (response *repository.Company, err error) {
 	cmd := &commands.Get{
 		Ctx: ctx,
 		ID:  id,
@@ -88,7 +88,7 @@ func (c *Company) Update(ctx context.Context, req *repository.Company) (response
 	return cmd.Res, c.errorAdapter.AdaptSqlErr(c.interactor.Perform(cmd))
 }
 
-func (c *Company) Delete(ctx context.Context, id int) (err error) {
+func (c *Company) Delete(ctx context.Context, id string) (err error) {
 	cmd := &commands.Delete{
 		Ctx: ctx,
 		ID:  id,

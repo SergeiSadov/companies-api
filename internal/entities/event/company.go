@@ -1,7 +1,7 @@
 package event
 
 type CompanyEvent struct {
-	ID      int    `json:"id,omitempty"`
+	ID      string `json:"id,omitempty"`
 	Name    string `json:"name,omitempty"`
 	Code    string `json:"code,omitempty"`
 	Country string `json:"country,omitempty"`
@@ -10,5 +10,5 @@ type CompanyEvent struct {
 }
 
 type IDEvent struct {
-	ID int `json:"id,omitempty"`
+	ID string `json:"id,omitempty"`
 }

@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"companies-api/internal/entities/api"
-	"companies-api/internal/pkg/kafka_writer"
 	"companies-api/internal/repositories/company"
 	"companies-api/internal/services/company/adapter"
 )
@@ -19,40 +18,23 @@ type IService interface {
 }
 
 type service struct {
-	companyRepo  company.IRepository
-	createWriter kafka_writer.IKafkaWriter
-	updateWriter kafka_writer.IKafkaWriter
-	deleteWriter kafka_writer.IKafkaWriter
-	adapter      adapter.IAdapter
+	companyRepo company.IRepository
+	adapter     adapter.IAdapter
 }
 
 func NewService(
 	companyRepo company.IRepository,
-	createWriter kafka_writer.IKafkaWriter,
-	updateWriter kafka_writer.IKafkaWriter,
-	deleteWriter kafka_writer.IKafkaWriter,
 	adapter adapter.IAdapter,
 ) *service {
 	return &service{
-		companyRepo:  companyRepo,
-		createWriter: createWriter,
-		updateWriter: updateWriter,
-		deleteWriter: deleteWriter,
-		adapter:      adapter,
+		companyRepo: companyRepo,
+		adapter:     adapter,
 	}
 }
 
 func (s service) Create(ctx context.Context, req *api.CreateCompanyRequest) (response *api.CreateCompanyResponse, err error) {
 	res, err := s.companyRepo.Create(ctx, s.adapter.AdaptCreateReqToRepo(req))
 	if err != nil {
-		return
-	}
-
-	event, err := s.adapter.AdaptCompanyRepoToKafka(res)
-	if err != nil {
-		return
-	}
-	if err = s.createWriter.WriteMessages(ctx, event); err != nil {
 		return
 	}
 
@@ -92,28 +74,12 @@ func (s service) Update(ctx context.Context, req *api.UpdateCompanyRequest) (res
 		return
 	}
 
-	event, err := s.adapter.AdaptCompanyRepoToKafka(res)
-	if err != nil {
-		return
-	}
-	if err = s.updateWriter.WriteMessages(ctx, event); err != nil {
-		return
-	}
-
 	return s.adapter.AdaptRepoToUpdateResp(res), nil
 }
 
 func (s service) Delete(ctx context.Context, req *api.DeleteCompanyRequest) (err error) {
 	err = s.companyRepo.Delete(ctx, s.adapter.AdaptDeleteReqToRepo(req))
 	if err != nil {
-		return
-	}
-
-	event, err := s.adapter.AdaptIDEventToKafka(req.ID)
-	if err != nil {
-		return
-	}
-	if err = s.deleteWriter.WriteMessages(ctx, event); err != nil {
 		return
 	}
 

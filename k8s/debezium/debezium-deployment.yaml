@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: debezium
+  namespace: companies
+  labels:
+    app: companies-debezium
+spec:
+  selector:
+    matchLabels:
+      app: companies-debezium
+      tier: debezium
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: companies-debezium
+        tier: debezium
+    spec:
+      containers:
+        - image: debezium/connect:latest
+          name: debezium
+          imagePullPolicy: "IfNotPresent"
+          envFrom:
+            - configMapRef:
+                name: debezium-config
+          ports:
+            - containerPort: 8083
+              name: debezium

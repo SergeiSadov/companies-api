@@ -2,3 +2,4 @@
 .vscode
 /companies-api
 coverage.out
+/cover.out

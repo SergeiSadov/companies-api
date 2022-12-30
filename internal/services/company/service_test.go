@@ -58,9 +58,6 @@ func (s *ServiceTestSuite) SetupTest() {
 
 	s.service = NewService(
 		s.companyRepo,
-		s.createWriter,
-		s.updateWriter,
-		s.deleteWriter,
 		s.adapter,
 	)
 
@@ -131,7 +128,7 @@ func (s *ServiceTestSuite) getExpectedCompanyData() *expectedCompanyData {
 
 func (s *ServiceTestSuite) getCompany() *api.Company {
 	return &api.Company{
-		ID:      int(gofakeit.Int64()),
+		ID:      gofakeit.UUID(),
 		Name:    gofakeit.Company(),
 		Code:    gofakeit.UUID(),
 		Country: gofakeit.Country(),

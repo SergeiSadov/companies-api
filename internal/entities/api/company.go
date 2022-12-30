@@ -1,7 +1,7 @@
 package api
 
 type Company struct {
-	ID      int    `json:"id,omitempty"`
+	ID      string `json:"id,omitempty"`
 	Name    string `json:"name,omitempty"`
 	Code    string `json:"code,omitempty"`
 	Country string `json:"country,omitempty"`
@@ -45,7 +45,7 @@ type ListCompanyResponse struct {
 }
 
 type GetCompanyRequest struct {
-	ID int
+	ID string
 }
 
 type GetCompanyResponse struct {
@@ -53,7 +53,7 @@ type GetCompanyResponse struct {
 }
 
 type DeleteCompanyRequest struct {
-	ID int
+	ID string
 }
 
 type CompanyValidationParams struct {

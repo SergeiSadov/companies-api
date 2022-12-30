@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"net/http"
 )
 
 const (
@@ -24,7 +25,7 @@ func NewClient(client HttpClient, errAdapter IErrorAdapter) *Client {
 
 func (c *Client) GetCountryCode(ip string) (code string, err error) {
 	resp, err := c.client.Get(fmt.Sprintf(UrlTpl, ip))
-	if err != nil {
+	if err != nil || resp.StatusCode != http.StatusOK {
 		return code, c.errAdapter.AdaptStatusToErr(resp.StatusCode, err)
 	}
 
@@ -33,7 +34,9 @@ func (c *Client) GetCountryCode(ip string) (code string, err error) {
 	if err != nil {
 		return
 	}
+	fmt.Println("code", resp.StatusCode)
 
+	fmt.Printf(string(body))
 	if err = json.Unmarshal(body, &countryResp); err != nil {
 		return
 	}

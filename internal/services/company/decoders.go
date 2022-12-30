@@ -64,12 +64,7 @@ func decodeCreateCompanyRequest(ctx context.Context, r *http.Request) (resp inte
 }
 
 func decodeGetCompanyRequest(ctx context.Context, r *http.Request) (resp interface{}, err error) {
-	id, err := strconv.Atoi(mux.Vars(r)["id"])
-	if err != nil {
-		return nil, fmt.Errorf("error: %v, %w", err, errors.ErrBadRequest)
-	}
-
-	return &api.GetCompanyRequest{ID: id}, nil
+	return &api.GetCompanyRequest{ID: mux.Vars(r)["id"]}, nil
 }
 
 func decodeUpdateCompanyRequest(ctx context.Context, r *http.Request) (resp interface{}, err error) {
@@ -81,20 +76,11 @@ func decodeUpdateCompanyRequest(ctx context.Context, r *http.Request) (resp inte
 	if err = json.Unmarshal(body, &req); err != nil {
 		return nil, fmt.Errorf("error: %v, %w", err, errors.ErrBadRequest)
 	}
-	id, err := strconv.Atoi(mux.Vars(r)["id"])
-	if err != nil {
-		return nil, fmt.Errorf("error: %v, %w", err, errors.ErrBadRequest)
-	}
-	req.ID = id
+	req.ID = mux.Vars(r)["id"]
 
 	return &req, nil
 }
 
 func decodeDeleteCompanyRequest(ctx context.Context, r *http.Request) (resp interface{}, err error) {
-	id, err := strconv.Atoi(mux.Vars(r)["id"])
-	if err != nil {
-		return nil, fmt.Errorf("error: %v, %w", err, errors.ErrBadRequest)
-	}
-
-	return &api.DeleteCompanyRequest{ID: id}, nil
+	return &api.DeleteCompanyRequest{ID: mux.Vars(r)["id"]}, nil
 }

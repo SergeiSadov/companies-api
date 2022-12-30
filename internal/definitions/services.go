@@ -2,7 +2,6 @@ package definitions
 
 import (
 	"companies-api/internal/configs"
-	"companies-api/internal/pkg/kafka_writer"
 	"companies-api/internal/repositories/company"
 	authsvc "companies-api/internal/services/auth"
 	companysvc "companies-api/internal/services/company"
@@ -22,15 +21,9 @@ func GetCompanyServiceDef() di.Def {
 		Scope: di.App,
 		Build: func(ctn di.Container) (interface{}, error) {
 			companyRepo := ctn.Get(CompanyRepoDef).(company.IRepository)
-			createWriter := ctn.Get(CreateCompanyKafkaWriterDef).(kafka_writer.IKafkaWriter)
-			updateWriter := ctn.Get(UpdateCompanyKafkaWriterDef).(kafka_writer.IKafkaWriter)
-			deleteWriter := ctn.Get(DeleteCompanyKafkaWriterDef).(kafka_writer.IKafkaWriter)
 
 			return companysvc.NewService(
 				companyRepo,
-				createWriter,
-				updateWriter,
-				deleteWriter,
 				adapter.NewAdapter(),
 			), nil
 		},

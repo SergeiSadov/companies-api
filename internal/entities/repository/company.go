@@ -1,12 +1,12 @@
 package repository
 
 type Company struct {
-	ID      int    `gorm:"id"`
-	Name    string `gorm:"name"`
-	Code    string `gorm:"code"`
-	Country string `gorm:"country"`
-	Website string `gorm:"website"`
-	Phone   string `gorm:"phone"`
+	ID      string `gorm:"id" json:"id"`
+	Name    string `gorm:"name" json:"name"`
+	Code    string `gorm:"code" json:"code"`
+	Country string `gorm:"country" json:"country"`
+	Website string `gorm:"website" json:"website"`
+	Phone   string `gorm:"phone" json:"phone"`
 }
 
 type ListCompanyParams struct {

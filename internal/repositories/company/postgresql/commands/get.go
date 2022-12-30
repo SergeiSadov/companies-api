@@ -11,7 +11,7 @@ import (
 type Get struct {
 	Ctx context.Context
 
-	ID int
+	ID string
 
 	Res *repository.Company
 }

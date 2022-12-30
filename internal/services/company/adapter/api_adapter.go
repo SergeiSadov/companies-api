@@ -1,32 +1,24 @@
 package adapter
 
 import (
-	"encoding/json"
-
 	"companies-api/internal/entities/api"
-	"companies-api/internal/entities/event"
 	"companies-api/internal/entities/repository"
-
-	"github.com/segmentio/kafka-go"
 )
 
 type IAdapter interface {
 	AdaptCreateReqToRepo(req *api.CreateCompanyRequest) (adapted *repository.Company)
 	AdaptRepoToCreateResp(req *repository.Company) (adapted *api.CreateCompanyResponse)
 
-	AdaptGetReqToRepo(req *api.GetCompanyRequest) (id int)
+	AdaptGetReqToRepo(req *api.GetCompanyRequest) (id string)
 	AdaptRepoToGetResp(req *repository.Company) (adapted *api.GetCompanyResponse)
 
 	AdaptUpdateReqToRepo(req *api.UpdateCompanyRequest) (adapted *repository.Company)
 	AdaptRepoToUpdateResp(req *repository.Company) (adapted *api.UpdateCompanyResponse)
 
-	AdaptDeleteReqToRepo(req *api.DeleteCompanyRequest) (id int)
+	AdaptDeleteReqToRepo(req *api.DeleteCompanyRequest) (id string)
 
 	AdaptListReqToRepo(req *api.ListCompanyRequest) (adapted *repository.ListCompanyParams)
 	AdaptRepoToListResp(req []repository.Company) (adapted []api.Company)
-
-	AdaptCompanyRepoToKafka(req *repository.Company) (adapted kafka.Message, err error)
-	AdaptIDEventToKafka(id int) (adapted kafka.Message, err error)
 }
 
 type Adapter struct {
@@ -60,7 +52,7 @@ func (a *Adapter) AdaptRepoToCreateResp(req *repository.Company) (adapted *api.C
 	}
 }
 
-func (a *Adapter) AdaptGetReqToRepo(req *api.GetCompanyRequest) (id int) {
+func (a *Adapter) AdaptGetReqToRepo(req *api.GetCompanyRequest) (id string) {
 	return req.ID
 }
 
@@ -101,7 +93,7 @@ func (a *Adapter) AdaptRepoToUpdateResp(req *repository.Company) (adapted *api.U
 	}
 }
 
-func (a *Adapter) AdaptDeleteReqToRepo(req *api.DeleteCompanyRequest) (id int) {
+func (a *Adapter) AdaptDeleteReqToRepo(req *api.DeleteCompanyRequest) (id string) {
 	return req.ID
 }
 
@@ -129,37 +121,4 @@ func (a *Adapter) AdaptRepoToListResp(req []repository.Company) (adapted []api.C
 	}
 
 	return
-}
-
-func (a *Adapter) AdaptCompanyRepoToKafka(req *repository.Company) (adapted kafka.Message, err error) {
-	e := event.CompanyEvent{
-		ID:      req.ID,
-		Name:    req.Name,
-		Code:    req.Code,
-		Country: req.Country,
-		Website: req.Website,
-		Phone:   req.Phone,
-	}
-	data, err := json.Marshal(e)
-	if err != nil {
-		return adapted, err
-	}
-
-	return kafka.Message{
-		Value: data,
-	}, nil
-}
-
-func (a *Adapter) AdaptIDEventToKafka(id int) (adapted kafka.Message, err error) {
-	e := event.IDEvent{
-		ID: id,
-	}
-	data, err := json.Marshal(e)
-	if err != nil {
-		return adapted, err
-	}
-
-	return kafka.Message{
-		Value: data,
-	}, nil
 }

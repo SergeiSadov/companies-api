@@ -2,15 +2,13 @@ package company
 
 import (
 	"bytes"
-	"encoding/json"
-	"io/ioutil"
-	"net/http"
-	"strconv"
-
 	"companies-api/internal/entities/api"
 	"companies-api/internal/pkg/errors"
 	"companies-api/internal/pkg/middlewares/auth"
 	"companies-api/internal/pkg/middlewares/ip"
+	"encoding/json"
+	"io/ioutil"
+	"net/http"
 
 	"github.com/brianvoe/gofakeit/v6"
 	"github.com/golang/mock/gomock"
@@ -27,7 +25,7 @@ func (s *ServiceTestSuite) Test_SuccessUpdateCompany() {
 	s.updateWriter.EXPECT().WriteMessages(gomock.Any(), expectedData.kafkaMessageCompany).Times(1).Return(nil)
 	s.ipapiClient.EXPECT().GetCountryCode(addr).Times(1).Return(ip.DefaultAllowedCountry, nil)
 
-	req, err := http.NewRequest(http.MethodPut, s.server.URL+"/companies/"+strconv.Itoa(expectedData.apiCompany.ID), bytes.NewReader(body))
+	req, err := http.NewRequest(http.MethodPut, s.server.URL+"/companies/"+expectedData.apiCompany.ID, bytes.NewReader(body))
 	s.NoError(err)
 	req.Header.Add("X-Forwarded-For", addr)
 	req.Header.Add(auth.Authorization, s.token)
@@ -59,7 +57,7 @@ func (s *ServiceTestSuite) Test_FailUpdateCompany_NotFound() {
 	s.companyRepo.EXPECT().Update(gomock.Any(), expectedData.repoCompany).Times(1).Return(nil, errors.ErrNotFound)
 	s.ipapiClient.EXPECT().GetCountryCode(addr).Times(1).Return(ip.DefaultAllowedCountry, nil)
 
-	req, err := http.NewRequest(http.MethodPut, s.server.URL+"/companies/"+strconv.Itoa(expectedData.apiCompany.ID), bytes.NewReader(body))
+	req, err := http.NewRequest(http.MethodPut, s.server.URL+"/companies/"+expectedData.apiCompany.ID, bytes.NewReader(body))
 	s.NoError(err)
 	req.Header.Add("X-Forwarded-For", addr)
 	req.Header.Add(auth.Authorization, s.token)

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: debezium-config
+  namespace: companies
+  labels:
+    app: debezium
+data:
+  BOOTSTRAP_SERVERS: "debezium-cluster-kafka-bootstrap:9092"
+  GROUP_ID: "debezium"
+  CONFIG_STORAGE_TOPIC: "debezium_connect_configs"
+  OFFSET_STORAGE_TOPIC: "debezium_connect_offsets"
+  STATUS_STORAGE_TOPIC: "debezium_source_connect_statuses"

@@ -14,7 +14,7 @@ func upCreateTableCompanies(tx *sql.Tx) error {
 	if _, err := tx.Exec(`
 CREATE TABLE IF NOT EXISTS companies
 (
-    id      BIGSERIAL NOT NULL PRIMARY KEY,
+    id      UUID NOT NULL PRIMARY KEY,
     name    VARCHAR(255),
     code    VARCHAR(255),
     country    VARCHAR(255),

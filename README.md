@@ -22,23 +22,24 @@ To run an app using your local environment:
 
 To run an app in kubernetes execute this command below (for example, in minikube):
 ```
+kubectl create ns companies
+
 kubectl apply -f k8s/postgres/postgres-configmap.yaml
 kubectl apply -f k8s/postgres/postgres-storage.yaml  
 kubectl apply -f k8s/postgres/postgres-deployment.yaml
 kubectl apply -f k8s/postgres/postgres-service.yaml 
 
-kubectl apply -f k8s/zookeeper/zookeeper-configmap.yaml
-kubectl apply -f k8s/zookeeper/zookeeper-deployment.yaml
-kubectl apply -f k8s/zookeeper/zookeeper-service.yaml 
 
-kubectl apply -f k8s/kafka/kafka-configmap.yaml
+helm repo add strimzi https://strimzi.io/charts/
+helm install strimzi/strimzi-kafka-operator -g --namespace companies
+
 kubectl apply -f k8s/kafka/kafka-deployment.yaml
-kubectl apply -f k8s/kafka/kafka-service.yaml 
+kubectl apply -f k8s/kafka/kafka-user.yaml
 
-kubectl apply -f k8s/companies/companies-configmap.yaml
-kubectl apply -f k8s/companies/companies-deployment.yaml
-kubectl apply -f k8s/companies/companies-service.yaml 
-
+kubectl apply -f k8s/debezium/debezium-configmap.yaml
+kubectl apply -f k8s/debezium/debezium-deployment.yaml
+kubectl wait deployments/companies-debezium --for=condition=Ready --timeout=300s -n companies
+kubectl apply -f k8s/debezium/debezium-job.yaml
 
 ```
 
@@ -48,4 +49,4 @@ App exposes 3000 port by default
 
 - [ ] Add resilient kafka client. Current implementation is naive and error prone
 - [ ] Add additional unit test for pkg dir
-- [ ] Fix kafka for k8s config
+- [x] Fix kafka for k8s config

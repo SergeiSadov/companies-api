@@ -2,6 +2,7 @@ package ipapi
 
 const (
 	StatusTooManyRequests = 104
+	StatusRateLimited     = 429
 )
 
 type IErrorAdapter interface {

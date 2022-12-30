@@ -28,6 +28,7 @@ func GetIPAPIClientDef() di.Def {
 			},
 				ipapi.NewErrAdapter(map[int]error{
 					ipapi.StatusTooManyRequests: ipapi.ErrToManyRequests,
+					ipapi.StatusRateLimited:     ipapi.ErrToManyRequests,
 				}),
 			), nil
 		},

@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: companies-postgres
+  namespace: companies
   labels:
     app: companies-postgres
 spec:

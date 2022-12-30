@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: debezium-register-adapter
+  namespace: companies
+spec:
+  template:
+    spec:
+      containers:
+        - name: debezium-register-adapter
+          image: curlimages/curl:latest
+          args:
+            - /bin/sh
+            - -c
+            - "curl -i --location --request POST 'http://companies-debezium:8083/connectors/' --header 'Content-Type: application/json' --data-raw '{ \"name\": \"something-outbox-connector\", \"config\": { \"connector.class\": \"io.debezium.connector.postgresql.PostgresConnector\", \"tasks.max\": \"1\", \"database.hostname\": \"companies-postgres\", \"database.port\": \"5432\", \"database.user\": \"user\", \"database.password\": \"pass\", \"database.dbname\": \"companies\", \"database.server.name\": \"companies-postgres\", \"tombstones.on.delete\": \"false\", \"table.include.list\": \"public.outbox\", \"key.converter\": \"org.apache.kafka.connect.storage.StringConverter\", \"value.converter\": \"org.apache.kafka.connect.storage.StringConverter\", \"transforms\": \"outbox\", \"plugin.name\": \"pgoutput\", \"topic.prefix\": \"companies.\", \"route.by.field\": \"type\", \"transforms.outbox.route.by.field\": \"type\", \"transforms.outbox.type\": \"io.debezium.transforms.outbox.EventRouter\" } }'"
+      restartPolicy: Never
+  backoffLimit: 4

@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: companies-postgres
+  namespace: companies
   labels:
     app: companies-postgres
 spec:
@@ -19,6 +20,7 @@ spec:
       containers:
         - image: postgres:latest
           name: postgres
+          args: [ "-c", "wal_level=logical"]
           imagePullPolicy: "IfNotPresent"
           envFrom:
             - configMapRef:

@@ -66,7 +66,7 @@ func (mr *MockIRepositoryMockRecorder) Create(ctx, req interface{}) *gomock.Call
 }
 
 // Delete mocks base method.
-func (m *MockIRepository) Delete(ctx context.Context, id int) error {
+func (m *MockIRepository) Delete(ctx context.Context, id string) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Delete", ctx, id)
 	ret0, _ := ret[0].(error)
@@ -80,7 +80,7 @@ func (mr *MockIRepositoryMockRecorder) Delete(ctx, id interface{}) *gomock.Call 
 }
 
 // Get mocks base method.
-func (m *MockIRepository) Get(ctx context.Context, id int) (*repository.Company, error) {
+func (m *MockIRepository) Get(ctx context.Context, id string) (*repository.Company, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Get", ctx, id)
 	ret0, _ := ret[0].(*repository.Company)

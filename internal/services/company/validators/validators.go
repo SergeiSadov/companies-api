@@ -17,10 +17,10 @@ const (
 )
 
 type ValidatorFunc func(c api.Company) (err error)
-type IDValidatorFunc func(id int) (err error)
+type IDValidatorFunc func(id string) (err error)
 
-func ValidateID(id int) (err error) {
-	if id == 0 {
+func ValidateID(id string) (err error) {
+	if id == "" {
 		return errors.ErrInvalidCompanyID
 	}
 
