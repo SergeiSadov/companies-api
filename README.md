@@ -9,6 +9,13 @@ This a REST API Microservices that handles Company entity with following attribu
 For read operation, fetching one or many companies is available.
 Each Company’s attribute is available as filtering in the CRUD operations.
 
+For resiliency the outbox pattern was implemented into this app. Each create,update,delete operation is saved into "outbox" table.
+CDC (Change Data Capture) is implemented using the Debezium application which monitors outbox table and pushes events to topics:
+```
+outbox.event.companies-create
+outbox.event.companies-delete
+outbox.event.companies-update
+```
 ## Getting Started
 You can find the swagger.yml file with the detailed description of an API in api/ directory
 
@@ -29,7 +36,6 @@ kubectl apply -f k8s/postgres/postgres-storage.yaml
 kubectl apply -f k8s/postgres/postgres-deployment.yaml
 kubectl apply -f k8s/postgres/postgres-service.yaml 
 
-
 helm repo add strimzi https://strimzi.io/charts/
 helm install strimzi/strimzi-kafka-operator -g --namespace companies
 
@@ -40,13 +46,6 @@ kubectl apply -f k8s/debezium/debezium-configmap.yaml
 kubectl apply -f k8s/debezium/debezium-deployment.yaml
 kubectl wait deployments/companies-debezium --for=condition=Ready --timeout=300s -n companies
 kubectl apply -f k8s/debezium/debezium-job.yaml
-
 ```
 
 App exposes 3000 port by default
-
-### TODO List
-
-- [ ] Add resilient kafka client. Current implementation is naive and error prone
-- [ ] Add additional unit test for pkg dir
-- [x] Fix kafka for k8s config
