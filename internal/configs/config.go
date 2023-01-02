@@ -7,7 +7,6 @@ import (
 type Config struct {
 	App       App
 	Database  Database
-	Kafka     Kafka
 	Countries Countries
 }
 

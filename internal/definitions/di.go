@@ -15,9 +15,6 @@ func Build() (container di.Container, err error) {
 	err = builder.Add([]di.Def{
 		GetConfigDef(),
 		GetLoggerDef(),
-		GetCreateCompanyKafkaWriter(),
-		GetUpdateCompanyKafkaWriterDef(),
-		GetDeleteCompanyKafkaWriterDef(),
 		GetIPAPIClientDef(),
 		GetIPAPICachedClientDef(),
 		GetConnectionDef(),

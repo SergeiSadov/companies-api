@@ -34,9 +34,6 @@ func (c *Client) GetCountryCode(ip string) (code string, err error) {
 	if err != nil {
 		return
 	}
-	fmt.Println("code", resp.StatusCode)
-
-	fmt.Printf(string(body))
 	if err = json.Unmarshal(body, &countryResp); err != nil {
 		return
 	}

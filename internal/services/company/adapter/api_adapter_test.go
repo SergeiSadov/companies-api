@@ -2,17 +2,14 @@ package adapter
 
 import (
 	"companies-api/internal/entities/api"
-	"companies-api/internal/entities/event"
 	"companies-api/internal/entities/repository"
-	"encoding/json"
 	"testing"
 
-	"github.com/segmentio/kafka-go"
 	"github.com/stretchr/testify/assert"
 )
 
 const (
-	testProjectID = 1
+	testProjectID = "1"
 	testName      = "name"
 	testCode      = "1234-test"
 	testCountry   = "US"
@@ -112,7 +109,7 @@ func TestAdapter_AdaptGetReqToRepo(t *testing.T) {
 		name   string
 		a      *Adapter
 		req    *api.GetCompanyRequest
-		wantId int
+		wantId string
 	}{
 		{
 			"id is present",
@@ -214,7 +211,7 @@ func TestAdapter_AdaptDeleteReqToRepo(t *testing.T) {
 		name   string
 		a      *Adapter
 		req    *api.DeleteCompanyRequest
-		wantId int
+		wantId string
 	}{
 		{
 			"id is present",
@@ -289,69 +286,6 @@ func TestAdapter_AdaptRepoToListResp(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			actual := tt.a.AdaptRepoToListResp(tt.req)
 			assert.Equal(t, tt.wantAdapted, actual)
-		})
-	}
-}
-
-func TestAdapter_AdaptCompanyRepoToKafka(t *testing.T) {
-	adapter := NewAdapter()
-
-	tests := []struct {
-		name string
-		a    *Adapter
-		req  *repository.Company
-	}{
-		{
-			"all fields are present",
-			adapter,
-			&companyRepository,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			e := event.CompanyEvent{
-				ID:      tt.req.ID,
-				Name:    tt.req.Name,
-				Code:    tt.req.Code,
-				Country: tt.req.Country,
-				Website: tt.req.Website,
-				Phone:   tt.req.Phone,
-			}
-			expected, err := json.Marshal(e)
-			assert.NoError(t, err)
-
-			actual, err := tt.a.AdaptCompanyRepoToKafka(tt.req)
-			assert.NoError(t, err)
-			assert.Equal(t, kafka.Message{Value: expected}, actual)
-		})
-	}
-}
-
-func TestAdapter_AdaptIDEventToKafka(t *testing.T) {
-	adapter := NewAdapter()
-
-	tests := []struct {
-		name string
-		a    *Adapter
-		id   int
-	}{
-		{
-			"all fields are present",
-			adapter,
-			testProjectID,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			e := event.IDEvent{
-				ID: tt.id,
-			}
-			expected, err := json.Marshal(e)
-			assert.NoError(t, err)
-
-			actual, err := tt.a.AdaptIDEventToKafka(tt.id)
-			assert.NoError(t, err)
-			assert.Equal(t, kafka.Message{Value: expected}, actual)
 		})
 	}
 }

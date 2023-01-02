@@ -20,7 +20,7 @@ func NewInteractor(db *gorm.DB) *Interactor {
 
 func (i *Interactor) Perform(cmd ICommand) (err error) {
 	if command, ok := cmd.(ICmd); ok {
-		return command.Exec(i.db.Debug())
+		return command.Exec(i.db)
 	}
 
 	return errors.New("cannot execute non gorm command")

@@ -12,7 +12,6 @@ import (
 	"companies-api/internal/entities/repository"
 	"companies-api/internal/pkg/error_adapters/http_adapter"
 	"companies-api/internal/pkg/http_clients/ipapi"
-	"companies-api/internal/pkg/kafka_writer"
 	"companies-api/internal/pkg/middlewares/auth"
 	"companies-api/internal/pkg/middlewares/ip"
 	"companies-api/internal/repositories/company"
@@ -37,22 +36,16 @@ type ServiceTestSuite struct {
 	ctrl    *gomock.Controller
 	service IService
 
-	companyRepo  *company.MockIRepository
-	createWriter *kafka_writer.MockIKafkaWriter
-	updateWriter *kafka_writer.MockIKafkaWriter
-	deleteWriter *kafka_writer.MockIKafkaWriter
-	adapter      adapter.IAdapter
-	ipapiClient  *ipapi.MockIClient
-	server       *httptest.Server
-	token        string
+	companyRepo *company.MockIRepository
+	adapter     adapter.IAdapter
+	ipapiClient *ipapi.MockIClient
+	server      *httptest.Server
+	token       string
 }
 
 func (s *ServiceTestSuite) SetupTest() {
 	s.ctrl = gomock.NewController(s.T())
 	s.companyRepo = company.NewMockIRepository(s.ctrl)
-	s.createWriter = kafka_writer.NewMockIKafkaWriter(s.ctrl)
-	s.updateWriter = kafka_writer.NewMockIKafkaWriter(s.ctrl)
-	s.deleteWriter = kafka_writer.NewMockIKafkaWriter(s.ctrl)
 	s.adapter = adapter.NewAdapter()
 	s.ipapiClient = ipapi.NewMockIClient(s.ctrl)
 

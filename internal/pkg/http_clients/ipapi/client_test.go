@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	testIpOk   = "192.168.8.1.1"
+	testIpOk   = "192.168.1.1"
 	testIpFail = "0.0.0.0"
 
 	testCountryCodeOk = "CY"
@@ -32,7 +32,8 @@ func TestClient_GetCountryCode_Success(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	mockHttpClient := NewMockHttpClient(ctrl)
 	mockHttpClient.EXPECT().Get(fmt.Sprintf(UrlTpl, testIpOk)).Return(&http.Response{
-		Body: io.NopCloser(strings.NewReader(ipApiOk)),
+		Body:       io.NopCloser(strings.NewReader(ipApiOk)),
+		StatusCode: http.StatusOK,
 	}, nil)
 	client := NewClient(mockHttpClient, NewErrAdapter(map[int]error{
 		StatusTooManyRequests: ErrToManyRequests,

@@ -36,20 +36,8 @@ func ValidateName(req api.Company) (err error) {
 }
 
 func ValidateCode(req api.Company) (err error) {
-	if req.Code == "" || utf8.RuneCountInString(req.Name) > DefaultMaxLen {
+	if req.Code == "" || utf8.RuneCountInString(req.Code) > DefaultMaxLen {
 		return errors.ErrInvalidCompanyCode
-	}
-	if countries.ByName(req.Country) == countries.Unknown {
-		return errors.ErrInvalidCompanyCountry
-	}
-	if req.Website == "" || utf8.RuneCountInString(req.Website) > 255 {
-		return errors.ErrInvalidCompanyWebsite
-	}
-
-	phoneRunesCount := utf8.RuneCountInString(req.Phone)
-	_, err = strconv.Atoi(req.Phone)
-	if err != nil || (phoneRunesCount < 4 && phoneRunesCount > 13) {
-		return errors.ErrInvalidCompanyPhone
 	}
 
 	return nil
@@ -58,15 +46,6 @@ func ValidateCode(req api.Company) (err error) {
 func ValidateCountry(req api.Company) (err error) {
 	if countries.ByName(req.Country) == countries.Unknown {
 		return errors.ErrInvalidCompanyCountry
-	}
-	if req.Website == "" || utf8.RuneCountInString(req.Website) > 255 {
-		return errors.ErrInvalidCompanyWebsite
-	}
-
-	phoneRunesCount := utf8.RuneCountInString(req.Phone)
-	_, err = strconv.Atoi(req.Phone)
-	if err != nil || (phoneRunesCount < 4 && phoneRunesCount > 13) {
-		return errors.ErrInvalidCompanyPhone
 	}
 
 	return nil
@@ -83,7 +62,7 @@ func ValidateWebsite(req api.Company) (err error) {
 func ValidatePhone(req api.Company) (err error) {
 	phoneRunesCount := utf8.RuneCountInString(req.Phone)
 	_, err = strconv.Atoi(req.Phone)
-	if err != nil || (phoneRunesCount < PhoneMinLen && phoneRunesCount > PhoneMaxLen) {
+	if err != nil || (phoneRunesCount < PhoneMinLen || phoneRunesCount > PhoneMaxLen) {
 		return errors.ErrInvalidCompanyPhone
 	}
 

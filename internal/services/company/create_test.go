@@ -22,7 +22,6 @@ func (s *ServiceTestSuite) Test_SuccessCreateCompany() {
 	s.NoError(err)
 
 	s.companyRepo.EXPECT().Create(gomock.Any(), expectedData.repoCompany).Times(1).Return(expectedData.repoCompany, nil)
-	s.createWriter.EXPECT().WriteMessages(gomock.Any(), expectedData.kafkaMessageCompany).Times(1).Return(nil)
 	s.ipapiClient.EXPECT().GetCountryCode(addr).Times(1).Return(ip.DefaultAllowedCountry, nil)
 
 	req, err := http.NewRequest(http.MethodPost, s.server.URL+"/companies", bytes.NewReader(body))

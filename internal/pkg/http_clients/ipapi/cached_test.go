@@ -18,12 +18,14 @@ func TestCachedClient_GetCountryCode_Success(t *testing.T) {
 	mockHttpClient := NewMockHttpClient(ctrl)
 
 	mockHttpClient.EXPECT().Get(fmt.Sprintf(UrlTpl, testIpOk)).Return(&http.Response{
-		Body: io.NopCloser(strings.NewReader(ipApiOk)),
+		Body:       io.NopCloser(strings.NewReader(ipApiOk)),
+		StatusCode: http.StatusOK,
 	}, nil).
 		//single call expected as the result must be placed in cache
 		Times(1)
 	client := NewClient(mockHttpClient, NewErrAdapter(map[int]error{
 		StatusTooManyRequests: ErrToManyRequests,
+		StatusRateLimited:     ErrToManyRequests,
 	}))
 
 	cache, err := lru.New(32)

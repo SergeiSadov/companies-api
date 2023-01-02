@@ -1,8 +1,6 @@
 package ipapi
 
 import (
-	"errors"
-
 	lru "github.com/hashicorp/golang-lru"
 )
 
@@ -32,7 +30,7 @@ func (c *CachedClient) GetCountryCode(ip string) (code string, err error) {
 			return
 		}
 		if code == "" {
-			return code, errors.New("empty code in response")
+			return code, ErrEmptyCodeInResponse
 		}
 		c.cache.Add(ip, code)
 		return
